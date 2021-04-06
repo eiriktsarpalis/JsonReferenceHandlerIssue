@@ -27,26 +27,6 @@ namespace JsonReferenceHandlerIssue
                     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
                 });
-
-            services.AddOpenApiDocument(config =>
-            {
-                config.PostProcess = document =>
-                {
-                    document.Info.Version = "v1";
-                    document.Info.Title = "JsonReferenceHandlerIssue Web API";
-                    document.Info.Contact = new NSwag.OpenApiContact
-                    {
-                        Name = "Acme",
-                        Email = "info@acme.com",
-                        Url = "http://www.acme.com/"
-                    };
-                    document.Info.License = new NSwag.OpenApiLicense
-                    {
-                        Name = "Terms of Service",
-                        Url = "http://www.acme.com/"
-                    };
-                };
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,12 +43,6 @@ namespace JsonReferenceHandlerIssue
                 // HTTP Strict Transport Security Protocol (HSTS) - The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseOpenApi();
-
-            // Enable middleware to serve swagger-ui
-            app.UseSwaggerUi3(settings => settings.AdditionalSettings.Add("displayRequestDuration", true));
 
             app.UseHttpsRedirection();
 
