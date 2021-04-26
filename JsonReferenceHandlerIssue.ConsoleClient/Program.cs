@@ -1,32 +1,33 @@
-﻿using JsonReferenceHandlerIssue.WebClient;
-using System;
-using System.Threading;
+﻿using JsonReferenceHandlerIssue.Controllers;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace JsonReferenceHandlerIssue.ConsoleClient
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
-            var clientService = new WebClientService(new WebClientServiceSettings("https://localhost:5001", string.Empty));
-
-            Console.WriteLine("Press ESC or CTRL-C to stop");
-
-            while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
+            // referencing MVC defaults and settings from reproducing app
+            // https://github.com/dotnet/aspnetcore/blob/main/src/Mvc/Mvc.Core/src/JsonOptions.cs#L34-L40
+            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web) 
             {
-                try
-                {
-                    var forecast = await clientService.WeatherForecastClient.GetAsync();
-                }
-                catch (System.Net.Http.HttpRequestException)
-                {
-                }
+                MaxDepth = 32,
+                ReferenceHandler = ReferenceHandler.Preserve,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
 
-                await Task.Delay(1000);
+            var stream = new MemoryStream();
+            WeatherForecast[] forecasts = new WeatherForecastController(null).Get().ToArray();
+            
+            while (true)
+            {
+                stream.Position = 0;
+                await JsonSerializer.SerializeAsync(stream, forecasts, options);
             }
-
-            Console.WriteLine("Closing..");
         }
     }
 }

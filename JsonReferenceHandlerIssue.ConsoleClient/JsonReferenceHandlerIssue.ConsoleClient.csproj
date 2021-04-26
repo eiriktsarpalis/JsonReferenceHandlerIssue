@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JsonReferenceHandlerIssue.WebClient\JsonReferenceHandlerIssue.WebClient.csproj" />
+    <ProjectReference Include="..\JsonReferenceHandlerIssue\JsonReferenceHandlerIssue.csproj" />
   </ItemGroup>
 
 </Project>
