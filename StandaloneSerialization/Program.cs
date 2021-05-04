@@ -16,16 +16,16 @@ namespace StandaloneSerialization
             Console.WriteLine("Press ESC or CTRL-C to stop");
 
             var stream = new MemoryStream();
-            
-            var options = new JsonSerializerOptions(JsonSerializerDefaults.Web) 
-            {
-                MaxDepth = 32,
-                ReferenceHandler = ReferenceHandler.Preserve,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
 
             while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape))
             {
+                var options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+                {
+                    MaxDepth = 32,
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+                };
+
                 WeatherForecast[] forecasts = new WeatherForecastController(null).Get().ToArray();
 
                 stream.Position = 0;
